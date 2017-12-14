@@ -1,0 +1,58 @@
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        {{title}}
+    </div>
+    <div class='panel-body'>
+        <div class='row'>
+            <div class='col-md-2'>Filter by:{{listFilter}}</div>
+            <input type="text" 
+            [(ngModel)]='listFilter'/>
+        </div>
+        <div class='table-responsive'>
+            <table class='table' *ngIf='products && products.length'>
+                <thead>
+                    <tr>
+                        <th>
+                            <button class='btn btn-primary'
+                                (click)='toggleImage()'>
+                                {{showImage?'Hide':'Show'}} Image
+                            </button>
+                        </th>
+                        <th>Product</th>
+                        <th>Code</th>
+                        <th>Available</th>
+                        <th>Price</th>
+                        <th>5 Star Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let product of filteredProducts'>
+                        <td>
+                            <img *ngIf='showImage' [src] = 'product.imageUrl' 
+                            [title] = 'product.productName'
+                            [style.width.px]= 'imageWidth'
+                            [style.hight.px]= 'imageHight'
+                            [style.margin.px]= 'imageMargin'>
+                        </td>
+                        <td>{{product.productName}}</td>
+                        <td>{{product.productCode | lowercase | convertToSpaces:'-'}}</td>
+                        <td>{{product.releaseDate}}</td>
+                        <td>{{product.price | currency:'USD':true:'1.2-2'}}</td>
+                        <!-- interpolation method: <td>{{product.starRating}}</td> --> 
+
+                        
+                        <!-- pass to nested component using @Input in nested, binding property in container-->
+                        <td><pm-star 
+                            [rating] = 'product.starRating'
+                            [filterFromProductList] = 'listFilter'
+                            (ratingClicked) = 'onRatingClick($event)' 
+                            (varOutput) = 'onRatingDoubleClick($event)'
+                            
+                            ></pm-star></td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
